@@ -9,4 +9,6 @@ export function DashboardScreen(props: DashboardScreenProps) {
   );
 }
 
+DashboardScreen.auth = true;
+
 export default DashboardScreen;
