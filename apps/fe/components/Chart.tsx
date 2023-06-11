@@ -3,18 +3,29 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
-function Chart() {
+interface IChartProps {
+  data: { _id: string; count: number }[];
+}
+
+function Chart(props: IChartProps) {
+  const { data } = props;
   useLayoutEffect(() => {
+    console.log(data);
     const root = am5.Root.new('chartdiv');
 
     root.setThemes([am5themes_Animated.new(root)]);
 
+    const xAxisRenderer = am5xy.AxisRendererX.new(root, {});
+
+    xAxisRenderer.labels.template.setAll({
+      rotation: -45,
+    });
+
     const chart = root.container.children.push(
       am5xy.XYChart.new(root, {
-        panY: false,
         layout: root.verticalLayout,
         panX: true,
-        wheelX: 'zoomX',
+        wheelY: 'zoomY',
       })
     );
 
@@ -31,25 +42,6 @@ function Chart() {
     );
     cursor.lineY.set('visible', false);
 
-    // Define data
-    const data = [
-      {
-        category: 'Research',
-        value1: 1000,
-        value2: 588,
-      },
-      {
-        category: 'Marketing',
-        value1: 1200,
-        value2: 1800,
-      },
-      {
-        category: 'Sales',
-        value1: 850,
-        value2: 1230,
-      },
-    ];
-
     // Create Y-axis
     const yAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
@@ -63,8 +55,8 @@ function Chart() {
     // Create X-Axis
     const xAxis = chart.xAxes.push(
       am5xy.CategoryAxis.new(root, {
-        renderer: am5xy.AxisRendererX.new(root, {}),
-        categoryField: 'category',
+        renderer: xAxisRenderer,
+        categoryField: '_id',
       })
     );
     xAxis.data.setAll(data);
@@ -75,22 +67,11 @@ function Chart() {
         name: 'Series',
         xAxis: xAxis,
         yAxis: yAxis,
-        valueYField: 'value1',
-        categoryXField: 'category',
+        valueYField: 'count',
+        categoryXField: '_id',
       })
     );
     series1.data.setAll(data);
-
-    const series2 = chart.series.push(
-      am5xy.ColumnSeries.new(root, {
-        name: 'Series',
-        xAxis: xAxis,
-        yAxis: yAxis,
-        valueYField: 'value2',
-        categoryXField: 'category',
-      })
-    );
-    series2.data.setAll(data);
 
     // Add legend
     const legend = chart.children.push(am5.Legend.new(root, {}));
@@ -102,7 +83,7 @@ function Chart() {
     return () => {
       root.dispose();
     };
-  }, []);
+  }, [data]);
 
   return <div id="chartdiv" style={{ width: '100%', height: '500px' }}></div>;
 }
