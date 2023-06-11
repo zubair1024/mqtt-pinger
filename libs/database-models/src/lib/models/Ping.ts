@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 
 export interface IPing {
   eventTime: Date;
@@ -16,4 +16,4 @@ const PingSchema = new Schema<IPing>(
     },
   }
 );
-export const Ping = model<IPing>('Ping', PingSchema);
+export const Ping = mongoose.models.Ping || model<IPing>('Ping', PingSchema);
