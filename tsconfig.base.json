@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mqtt-pinger/database-models": ["libs/database-models/src/index.ts"]
+      "@mqtt-pinger/database-models": ["libs/database-models/src/index.ts"],
+      "@mqtt-pinger/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
